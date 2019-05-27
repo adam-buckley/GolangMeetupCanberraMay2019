@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="end" style="height: 100%">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta charset="utf-8">
+		<style>
+			* {
+				padding: 0px;
+				margin: 0px;
+			}
+
+			#canvas {
+				z-index: 1;
+			}
+
+			.button_overlay {
+				position: fixed;
+				right: 10px;
+				top: 10px;
+				background-color: white;
+				/* background-color: rgba(255, 255, 255, 0.8); */
+				z-index: 1000;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- <div id="app"></div> -->
+		<canvas id="canvas" width="1920" height="902"></canvas>
+		<div class="button_overlay">
+			<button id="add_1000">1000</button>
+			<button id="add_10000">10,000</button>
+			<button id="add_a_lot">A lot...</button>
+		</div>
+		<noscript>
+			<div style="margin-top:20%;">
+				<h2 class='text-center'>Please turn on JS</h2>
+			</div>
+		</noscript>
+	</body>
+</html>

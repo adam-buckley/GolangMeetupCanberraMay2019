@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="end" style="height: 100%">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta charset="utf-8">
+		<style>
+			* {
+				padding: 0px;
+				margin: 0px;
+			}
+
+			#canvas {
+				z-index: 1;
+			}
+
+			.button_overlay {
+				position: fixed;
+				right: 10px;
+				top: 10px;
+				background-color: white;
+				/* background-color: rgba(255, 255, 255, 0.8); */
+				z-index: 1000;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- <div id="app"></div> -->
+		<canvas id="canvas" width="1920" height="902"></canvas>
+		<div class="button_overlay">
+			<button onclick="add_dot(1000)">1000</button>
+			<button onclick="add_dot(10000)">10,000</button>
+			<button onclick="add_dot(1000000)">A lot...</button>
+		</div>
+		<noscript>
+			<div style="margin-top:20%;">
+				<h2 class='text-center'>Please turn on JS</h2>
+			</div>
+		</noscript>
+
+		<script>
+			let dot_struct = []
+			let BOUNDS_X = 1920
+			let BOUNDS_Y = 902
+			let timer;
+			let canvas = document.getElementById("canvas")
+
+			canvas.addEventListener("click", () => {
+				add_dot(1)
+			})
+
+			add_dot = (num) => {
+				num = num <= 0 ? 1 : num
+				for (i = 0; i < num; i++) {
+					let rand_d_x = Math.floor(Math.random() * Math.floor(5))
+					let flip_d_x = Math.floor(Math.random() * Math.floor(2))
+					if (flip_d_x == 1) {
+						rand_d_x *= -1
+					}
+
+					let rand_d_y = Math.floor(Math.random() * Math.floor(5))
+					let flip_d_y = Math.floor(Math.random() * Math.floor(2))
+					if (flip_d_y == 1) {
+						rand_d_y *= -1
+					}
+
+					dot_struct.push({
+						x: Math.floor(Math.random() * Math.floor(BOUNDS_X)),
+						y: Math.floor(Math.random() * Math.floor(BOUNDS_Y)),
+						d_x: rand_d_x == 0 ? 1 : rand_d_x,
+						d_y: rand_d_y == 0 ? 1 : rand_d_y
+					})
+				}
+			}
+
+			document.addEventListener("DOMContentLoaded", function() {
+				timer = window.setInterval(() => {
+					var ctx = canvas.getContext("2d");
+					ctx.fillStyle = "black"
+					ctx.fillRect(0, 0, BOUNDS_X, BOUNDS_Y)
+
+					ctx.fillStyle = "white"
+
+					for (let dot of dot_struct) {
+						// func UpdatePos
+						if (dot.d_x >= 0 && dot.x + dot.d_x > BOUNDS_X) {
+							dot.d_x *= -1
+						}
+						
+						if (dot.d_x < 0 && dot.x + dot.d_x <= 0) {
+							dot.d_x *= -1
+						}
+						
+						if (dot.d_y >= 0 && dot.y + dot.d_y > BOUNDS_Y) {
+							dot.d_y *= -1
+						}
+						
+						if (dot.d_y < 0 && dot.y + dot.d_y <= 0) {
+							dot.d_y *= -1
+						}
+						
+						dot.x += dot.d_x
+						dot.y += dot.d_y
+
+						ctx.fillRect(dot.x, dot.y, 1, 1)
+					}
+				}, 50)
+			})
+		</script>
+	</body>
+</html>
