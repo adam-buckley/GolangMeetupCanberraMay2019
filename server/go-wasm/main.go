@@ -5,13 +5,16 @@ import (
 	"time"
 	"math/rand"
 	"syscall/js"
+	// "encoding/json"
+	// "strconv"
+	"strings"
 )
 
 type Dot struct {
-	X int
-	Y int
-	DX int
-	DY int
+	X int `json:x`
+	Y int	`json:y`
+	DX int `json:d_x`
+	DY int `json:d_y`
 }
 
 var DotStruct = []Dot{}
@@ -98,27 +101,35 @@ func AddDot(this js.Value, args []js.Value) interface{} {
 func UpdateDots(this js.Value, args []js.Value) interface{} {
 	
 	// Get canvas and update image
-	canvas := js.Global().Get("document").Call("getElementById", "canvas")
-	ctx := canvas.Call("getContext", "2d")
+	// canvas := js.Global().Get("document").Call("getElementById", "canvas")
+	// ctx := canvas.Call("getContext", "2d")
 	
 	// ctx.Call("clearRect", 0, 0, BoundsX, BoundsY)
 
 	// Black background
-	ctx.Set("fillStyle", "black")
-	ctx.Call("fillRect", 0, 0, BoundsX, BoundsY)
-	
+	// ctx.Set("fillStyle", "black")
+	// ctx.Call("fillRect", 0, 0, BoundsX, BoundsY)
+	var str strings.Builder
+	str.WriteString("[")
 	if len(DotStruct) > 0 {
-		ctx.Set("fillStyle", "white")
+		// ctx.Set("fillStyle", "white")
 		for index, dot := range DotStruct {
 			// fmt.Println(dot)
 			dot.UpdatePos()
 			DotStruct[index] = dot
+			fmt.Fprintf(&str, "{\"x\": %d, \"y\": %d}", dot.X, dot.Y)
+
+			if index < len(DotStruct) - 1 {
+				str.WriteString(",")
+			}
 			// fmt.Println(dot)
-			ctx.Call("fillRect", dot.X, dot.Y, 1, 1)
+			// ctx.Call("fillRect", dot.X, dot.Y, 1, 1)
 		}
 	}
 
-	return nil
+
+	str.WriteString("]")
+	return str.String()
 }
 
 func registerCallbacks() {
