@@ -100,6 +100,7 @@ func AddDot(this js.Value, args []js.Value) interface{} {
 func UpdateDots(this js.Value, args []js.Value) interface{} {
 	
 	js.Global().Get("window").Set("t0", js.Global().Get("performance").Call("now"))
+
 	// Get canvas and update image
 	// canvas := js.Global().Get("document").Call("getElementById", "canvas")
 	// canvas = document.getElementById("canvas")
@@ -113,11 +114,9 @@ func UpdateDots(this js.Value, args []js.Value) interface{} {
 	
 	var str strings.Builder
 	str.WriteString("[")
-	// buffer := make([]int, len(DotStruct) * 2, len(DotStruct) * 2 + 1)
-	
-	// buffer_index := 0
 
 	if len(DotStruct) > 0 {
+
 		// ctx.Set("fillStyle", "white")
 		for index := 0; index < len(DotStruct); index++ {
 
@@ -127,14 +126,10 @@ func UpdateDots(this js.Value, args []js.Value) interface{} {
 			str.WriteString(",")
 			str.WriteString(strconv.Itoa(DotStruct[index].Y))
 			
-			// buffer[buffer_index] = DotStruct[index].X
-			// buffer_index++
-			// buffer[buffer_index] = DotStruct[index].Y
-			// buffer_index++
-
 			if index < len(DotStruct) - 1 {
 				str.WriteString(",")
 			}
+
 			// fmt.Println(dot)
 			// ctx.Call("fillRect", DotStruct[index].X, DotStruct[index].Y, 1, 1)
 		}
@@ -145,7 +140,7 @@ func UpdateDots(this js.Value, args []js.Value) interface{} {
 
 	js.Global().Call("drawCanvas", str.String())
 
-	return nil // str.String()
+	return nil
 }
 
 func registerCallbacks() {
@@ -160,4 +155,5 @@ func main() {
 	c := make(chan struct{}, 0)
 	registerCallbacks()
 	<-c
+
 }
